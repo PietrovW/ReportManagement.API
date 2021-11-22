@@ -3,8 +3,8 @@ using ReportManagement.Application.Dtos;
 
 namespace ReportManagement.Application.Queries
 {
-    public class GetReportListQuery: IRequest<List<ReportDto>>
+    public class GetReportQuery: IRequest<ReportDto>
     {
-        public string? Name { get; set; }
+        public Guid Id { get; set; }
     }
 }

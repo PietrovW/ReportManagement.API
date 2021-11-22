@@ -9,7 +9,7 @@ namespace ReportManagement.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<ReportModel> builder)
         {
             builder.Property(p => p.Name).IsRequired();
-            builder.Property(p => p.Id).ValueGeneratedOnAdd().IsRequired();
+            builder.Property(p => p.Id).HasColumnType<Guid>("Guid").ValueGeneratedOnAdd().IsRequired();
         }
     }
 }

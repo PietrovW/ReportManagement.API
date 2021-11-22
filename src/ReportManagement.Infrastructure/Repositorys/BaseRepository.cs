@@ -1,18 +1,20 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 using ReportManagement.Infrastructure.Data;
 
 namespace ReportManagement.Infrastructure.Repositorys
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
+    public  class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
     {
         private readonly ApplicationDbContext _dbContext;
-        //public BaseRepository(ApplicationDbContext dbContext)
-        //{
-        //    _dbContext = dbContext;
-        //}
-        public T GetById(int id)
+        public BaseRepository(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public T GetById(Guid id)
         {
             return _dbContext.Set<T>().Find(id);
         }
@@ -26,10 +28,11 @@ namespace ReportManagement.Infrastructure.Repositorys
                    .Where(predicate)
                    .AsEnumerable();
         }
-        public void Insert(T entity)
+        public Guid Insert(T entity)
         {
-            _dbContext.Set<T>().Add(entity);
+            EntityEntry<T>  model = _dbContext.Set<T>().Add(entity);//TEntity
             _dbContext.SaveChanges();
+            return model.Entity.Id;
         }
         public void Update(T entity)
         {

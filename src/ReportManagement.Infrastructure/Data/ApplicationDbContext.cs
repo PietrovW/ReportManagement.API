@@ -11,11 +11,11 @@ namespace ReportManagement.Infrastructure.Data
         {
         }
 
-        public DbSet<ReportModel>? Reports { get; set; }
+        public DbSet<ReportModel> Reports { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
             builder.ApplyConfiguration(new ReportTypeConfiguration());
+            base.OnModelCreating(builder);
         }
     }
 }
