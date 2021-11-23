@@ -6,11 +6,13 @@ namespace ReportManagement.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions options)
             : base(options)
         {
         }
-
+        protected ApplicationDbContext()
+        {
+        }
         public DbSet<ReportModel> Reports { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
