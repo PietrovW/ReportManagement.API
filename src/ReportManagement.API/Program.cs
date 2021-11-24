@@ -20,10 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
 Assembly[]  assemblie = new Assembly[] { typeof(ReportManagement.Application.AutoMapper.Profiles).GetTypeInfo().Assembly };
 builder.Services.AddValidatorsFromAssemblyContaining<CreateReportRequest>(lifetime: ServiceLifetime.Scoped);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateReportCommand>(lifetime: ServiceLifetime.Scoped);
-//builder.Services.AddValidatorsFromAssemblies(assemblie,lifetime: ServiceLifetime.Scoped);
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<IReportRepository, ReportRepository>();
-builder.Services.AddMediatR(assemblie); 
+builder.Services.AddMediatR(assemblie);
 builder.Services.AddAutoMapper(assemblie);
 builder.Services.AddFluentValidation(fv => {
     fv.DisableDataAnnotationsValidation = true;
