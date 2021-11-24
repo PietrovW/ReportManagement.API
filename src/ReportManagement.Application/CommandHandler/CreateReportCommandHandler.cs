@@ -18,7 +18,7 @@ namespace ReportManagement.Application.CommandHandler
         public Task<Guid> Handle(CreateReportCommand request, CancellationToken cancellationToken)
         {
             ReportModel reportModel = _mapper.Map<ReportModel>(request);
-           Guid id= _reportRepository.Insert(reportModel);
+            Guid id= _reportRepository.Insert(reportModel);
             return Task.FromResult(id);
         }
     }
