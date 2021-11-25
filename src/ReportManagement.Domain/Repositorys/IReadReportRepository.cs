@@ -2,7 +2,7 @@
 
 namespace ReportManagement.Domain.Repositorys
 {
-    public interface IReportRepository : IBaseRepository<ReportModel>
+    public interface IReadReportRepository : IReadBaseRepository<ReportModel>
     {
     }
 }

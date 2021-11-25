@@ -1,6 +1,6 @@
 ﻿namespace ReportManagement.Domain.Models
 {
-    public abstract class BaseModel
+    public abstract class BaseEntity
     {
         public Guid Id { get; set; }
     }

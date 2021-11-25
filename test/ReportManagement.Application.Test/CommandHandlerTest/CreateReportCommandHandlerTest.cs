@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using ReportManagement.Application.AutoMapper;
@@ -18,7 +19,8 @@ namespace ReportManagement.Application.Test.CommandHandlerTest
         public async Task CreateReportCommand_CustomerDataCreateOnDatabase()
         {
             //Arange
-            var reportRepositoryMoq = new Mock<IReportRepository>();
+            var reportRepositoryMoq = new Mock<IWriteReportRepository>();
+            var mediatorMoq = new Mock<IMediator>();
             Guid testId= Guid.NewGuid();
             reportRepositoryMoq.Setup(f => f.Insert(It.IsAny<ReportModel>()))
                 .Returns(testId);
@@ -26,7 +28,7 @@ namespace ReportManagement.Application.Test.CommandHandlerTest
             var config = new MapperConfiguration(cfg => cfg.AddProfile<Profiles>());
             IMapper mapper = config.CreateMapper();
             var command = new CreateReportCommand() { Name ="test"};
-            var handler = new CreateReportCommandHandler(mapper, reportRepositoryMoq.Object);
+            var handler = new CreateReportCommandHandler(mapper, reportRepositoryMoq.Object, mediatorMoq.Object);
 
             //Act
             Guid id = await handler.Handle(command, new System.Threading.CancellationToken());

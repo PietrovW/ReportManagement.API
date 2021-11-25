@@ -1,6 +1,6 @@
 ﻿ namespace ReportManagement.Domain.Models
 {
-    public class ReportModel: BaseModel
+    public class ReportModel: BaseEntity
     {
         public string? Name { get; set; }
     }

@@ -4,9 +4,9 @@ using ReportManagement.Infrastructure.Data;
 
 namespace ReportManagement.Infrastructure.Repositorys
 {
-    public class ReportRepository: BaseRepository<ReportModel>, IReportRepository
+    public class WriteReportRepository: WriteBaseRepository<ReportModel>, IWriteReportRepository
     {
-        public ReportRepository(ApplicationDbContext dbContext) :base(dbContext)
+        public WriteReportRepository(ApplicationDbContext dbContext) :base(dbContext)
         {
 
         }
