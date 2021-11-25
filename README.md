@@ -1,13 +1,12 @@
-# ReportManagement
-
-# Project Title
- W tym artykule zaprezentuje się podstaw wzorca CQRS za przy pomocy pakietu MediatR nuget w .Net 6.
- 
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
-  
+
+
+# Project Title
+ ReportManagement
+   
  ## General info
 This article will present the basics of the CQRS pattern using the MediatR nuget in .Net 6 package.
 
