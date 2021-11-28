@@ -1,5 +1,6 @@
 ## Table of contents
 * [General info](#general-info)
+* [Developing](#developing)
 * [Technologies](#technologies)
 * [Setup](#setup)
 
@@ -9,6 +10,16 @@
    
  ## General info
 This article will present the basics of the CQRS pattern using the MediatR nuget in .Net 6 package.
+
+## Developing
+
+Here's a brief intro about what a developer must do in order to start developing
+the project further:
+
+```shell
+git clone https://github.com/PietrovW/ReportManagement.API.git
+cd ReportManagement.API/
+```
 
 ## Technologies
 Project is created with:
