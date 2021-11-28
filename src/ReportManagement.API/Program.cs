@@ -51,6 +51,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options=> options.UseSqlite(
 }));
 builder.Services.AddScoped<IApplicationMongoDbContext, ApplicationMongoDbContext>();
 var app = builder.Build();
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseSwagger();
@@ -60,11 +61,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-app.MapGet("/reports/{id}", async  (IMediator mediator, Guid id) =>
+app.MapGet("api/reports/{id}", async  (IMediator mediator, Guid id) =>
 {
     return await mediator.Send(new GetReportQuery() { Id = id });
 });
-app.MapPost("reports", async (IValidator<CreateReportRequest> validator, IMediator mediator, LinkGenerator links, [FromBody] CreateReportRequest request) =>
+app.MapPost("api/reports", async (IValidator<CreateReportRequest> validator, IMediator mediator, LinkGenerator links, [FromBody] CreateReportRequest request) =>
 {
 ValidationResult validationResult = validator.Validate(request);
 
@@ -74,6 +75,12 @@ ValidationResult validationResult = validator.Validate(request);
     }
     
     var command = new CreateReportCommand() { Name = request.Name };
+    var result = await mediator.Send(command);
+    return Results.Created($"/reports/{result}", command);
+});
+app.MapDelete("api/reports", async (IMediator mediator, Guid id) =>
+{
+    var command = new DeleteReportCommand() { Id = id };
     var result = await mediator.Send(command);
     return Results.Created($"/reports/{result}", command);
 });
