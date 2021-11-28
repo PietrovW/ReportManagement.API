@@ -14,12 +14,13 @@ using ReportManagement.Application.Queries;
 using ReportManagement.Data.Configurations;
 using ReportManagement.Domain.Repositorys;
 using ReportManagement.Infrastructure.Data;
-using ReportManagement.Infrastructure.Data.Configurations;
 using ReportManagement.Infrastructure.Data.Settings;
 using ReportManagement.Infrastructure.Repositorys;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<MongoOptions>(
+    builder.Configuration.GetSection(MongoOptions.Position));
 Assembly[]  assemblie = new Assembly[] { typeof(ReportManagement.Application.AutoMapper.Profiles).GetTypeInfo().Assembly };
 builder.Services.AddValidatorsFromAssemblyContaining<CreateReportRequest>(lifetime: ServiceLifetime.Scoped);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateReportCommand>(lifetime: ServiceLifetime.Scoped);

@@ -5,7 +5,7 @@ using ReportManagement.Infrastructure.Data.Settings;
 
 namespace ReportManagement.Infrastructure.Data
 {
-    public class ApplicationMongoDbContext: IApplicationMongoDbContext
+    public class ApplicationMongoDbContext : IApplicationMongoDbContext
     {
         private IMongoDatabase _database { get; set; }
         public IClientSessionHandle Session { get; set; }
@@ -28,7 +28,7 @@ namespace ReportManagement.Infrastructure.Data
             ConfigureMongo();
             return _database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
-        public void Add(Func<Task> func) 
+        public void Add(Func<Task> func)
         {
             _commands.Add(func);
         }
@@ -36,23 +36,14 @@ namespace ReportManagement.Infrastructure.Data
         {
             ConfigureMongo();
 
-            using (Session = await MongoClient.StartSessionAsync())
-            {
-                Session.StartTransaction();
+            var commandTasks = _commands.Select(c => c());
 
-                var commandTasks = _commands.Select(c => c());
-
-                await Task.WhenAll(commandTasks);
-
-                await Session.CommitTransactionAsync();
-            }
-
+            await Task.WhenAll(commandTasks);
             return _commands.Count;
         }
 
         public void Dispose()
         {
-            Session?.Dispose();
             GC.SuppressFinalize(this);
         }
 

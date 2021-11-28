@@ -11,15 +11,14 @@ namespace ReportManagement.Application.EventsHandler
         private readonly IApplicationMongoDbContext _applicationMongoDbContext;
         public CreateReportEventsHandler(IApplicationMongoDbContext applicationMongoDbContext)
         {
-            _applicationMongoDbContext=applicationMongoDbContext;
+            _applicationMongoDbContext = applicationMongoDbContext;
         }
 
         public async Task Handle(CreateReportEvents notification, CancellationToken cancellationToken)
         {
-            IMongoCollection<ReportModel> collation =_applicationMongoDbContext.GetCollection<ReportModel>();
+            IMongoCollection<ReportModel> collation = _applicationMongoDbContext.GetCollection<ReportModel>();
 
-            _applicationMongoDbContext.Add(() => collation.InsertOneAsync(new ReportModel() { Id= notification.Id , Name = notification.Name}));
-
+            _applicationMongoDbContext.Add(() => collation.InsertOneAsync(new ReportModel() { Id = notification.Id, Name = notification.Name }));
             await _applicationMongoDbContext.SaveChanges();
         }
     }

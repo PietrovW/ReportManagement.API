@@ -32,7 +32,7 @@ namespace ReportManagement.Infrastructure.Repositorys
         public async Task<IEnumerable<TEntity>> ListAsync(Expression<Func<TEntity, bool>> predicate)
         {
             var data = await DbSet.FindAsync(predicate);
-            return data.ToEnumerable();
+            return data.ToList();
         }
     }
 }
