@@ -7,6 +7,8 @@
 
 # Project Title
  ReportManagement
+
+ 
    
  ## General info
 This article will present the basics of the CQRS pattern using the MediatR nuget in .Net 6 package.
