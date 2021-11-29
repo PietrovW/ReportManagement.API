@@ -29,6 +29,8 @@ Project is created with:
 * xunit version: 2.4
 * xunit.runner.visualstudio version: 2.4
 * coverlet.collector version: 3.1
+* MongoDB version: 2.14
+* Microsoft.EntityFrameworkCore.Sqlite version: 6.0 
 
 ## Setup
 Project launch
