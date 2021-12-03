@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReportManagement.Domain.Models;
-using ReportManagement.Infrastructure.Data.Configurations;
+using System.Reflection;
 
 namespace ReportManagement.Infrastructure.Data
 {
@@ -11,13 +11,14 @@ namespace ReportManagement.Infrastructure.Data
         {
         }
         protected ApplicationDbContext()
+            :base()
         {
         }
-        public DbSet<ReportModel> Reports { get; set; }
+        public DbSet<ReportModel> Reports { get; set; } = null!;
        
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new ReportTypeConfiguration());
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
         }
     }
