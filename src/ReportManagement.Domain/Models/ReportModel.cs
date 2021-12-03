@@ -2,6 +2,6 @@
 {
     public class ReportModel: BaseEntity
     {
-        public string? Name { get; set; }
+        public string Name { get; set; } = String.Empty;
     }
 }

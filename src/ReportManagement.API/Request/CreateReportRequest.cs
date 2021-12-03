@@ -2,6 +2,6 @@
 {
     public class CreateReportRequest
     {
-        public string Name { get; set; }
+        public string Name { get; set; } =String.Empty;
     }
 }

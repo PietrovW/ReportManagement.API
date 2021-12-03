@@ -18,7 +18,7 @@ namespace ReportManagement.Application.QuerieHandler
         }
         public async Task<ReportDto> Handle(GetReportQuery request, CancellationToken cancellationToken)
         {
-            ReportModel? reportModels = await _reportRepository.GetByIdAsync(request.Id);
+            ReportModel reportModels = await _reportRepository.GetByIdAsync(request.Id);
             return _mapper.Map<ReportDto>(reportModels);
         }
     }

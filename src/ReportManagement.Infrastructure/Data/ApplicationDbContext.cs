@@ -14,6 +14,7 @@ namespace ReportManagement.Infrastructure.Data
         {
         }
         public DbSet<ReportModel> Reports { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ReportTypeConfiguration());

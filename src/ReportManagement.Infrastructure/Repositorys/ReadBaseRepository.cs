@@ -6,7 +6,7 @@ using ReportManagement.Domain.Repositorys;
 
 namespace ReportManagement.Infrastructure.Repositorys
 {
-    public class ReadBaseRepository<TEntity> : IReadBaseRepository<TEntity> where TEntity : BaseEntity
+    public class ReadBaseRepository<TEntity> : IReadBaseRepository<TEntity> where TEntity : BaseEntity , new()
     {
         private IApplicationMongoDbContext _dbContext;
         protected IMongoCollection<TEntity> DbSet;
@@ -15,14 +15,14 @@ namespace ReportManagement.Infrastructure.Repositorys
             _dbContext = dbContext;
             DbSet = _dbContext.GetCollection<TEntity>();
         }
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
             IEnumerable<TEntity> date = await ListAsync(x => x.Id == id);
             if(date.Any())
             {
                 return date.First();
             }
-            return null;
+            return new TEntity();
         }
         public async Task<IEnumerable<TEntity>> ListAsync()
         {

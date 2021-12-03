@@ -32,9 +32,8 @@ namespace ReportManagement.Application.Test.CommandHandlerTest
             var _writeReportRepositoryMock = new Mock<IWriteReportRepository>();
 
             var _command = new DeleteReportCommand() { Id= idtest };
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<Profiles>());
-            IMapper mapper = config.CreateMapper();
-            var handler = new DeleteReportCommandHandler(mapper,_writeReportRepositoryMock.Object, _readReportRepository.Object, _mediatorMock.Object);
+          
+            var handler = new DeleteReportCommandHandler(_writeReportRepositoryMock.Object, _readReportRepository.Object, _mediatorMock.Object);
 
             //Act
              await handler.Handle(_command, new System.Threading.CancellationToken());
