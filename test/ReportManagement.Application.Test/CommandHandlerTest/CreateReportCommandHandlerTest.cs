@@ -21,7 +21,7 @@ namespace ReportManagement.Application.Test.CommandHandlerTest
             //Arange
             var reportRepositoryMoq = new Mock<IWriteReportRepository>();
             var mediatorMoq = new Mock<IMediator>();
-            Guid testId= Guid.NewGuid();
+            var testId= Guid.NewGuid();
             reportRepositoryMoq.Setup(f => f.Insert(It.IsAny<ReportModel>()))
                 .Returns(testId);
 

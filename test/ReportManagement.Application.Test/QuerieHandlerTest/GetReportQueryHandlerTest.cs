@@ -21,10 +21,10 @@ namespace ReportManagement.Application.Test.QuerieHandlerTest
         {
             //Arange
             var reportRepositoryMoq = new Mock<IReadReportRepository>();
-            Guid testId = Guid.NewGuid();
-            ReportModel reportModel = new ReportModel() { Id = testId, Name = "test" };
+            var testId = Guid.NewGuid();
+            var reportModel = new ReportModel() { Id = testId, Name = "test" };
             reportRepositoryMoq.Setup(f => f.GetByIdAsync(It.IsAny<Guid>()))
-                .Returns(Task.FromResult(reportModel));
+                .ReturnsAsync(reportModel);
 
             var config = new MapperConfiguration(cfg => cfg.AddProfile<Profiles>());
             IMapper mapper = config.CreateMapper();
