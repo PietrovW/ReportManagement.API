@@ -25,6 +25,7 @@ namespace ReportManagement.API.Controllers.V1
 
         [MapToApiVersion("1.0")]
         [HttpGet("{id}.{format?}"), FormatFilter]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(ReportDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

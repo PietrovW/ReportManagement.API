@@ -10,15 +10,23 @@ namespace ReportManagement.API.OutputFormatters
     {
         public VcardOutputFormatter()
         {
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/plain"));
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/plain; ver=1.0"));
 
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);
         }
-
         protected override bool CanWriteType(Type? type)
-            => typeof(ReportDto).IsAssignableFrom(type)
-                || typeof(IEnumerable<ReportDto>).IsAssignableFrom(type);
+        {
+            if (typeof(ReportDto).IsAssignableFrom(type)
+            || typeof(IEnumerable<ReportDto>).IsAssignableFrom(type))
+            {
+                return base.CanWriteType(type);
+            }
+            return false;
+        }
+        //protected override bool CanWriteType(Type? type)
+        //    => typeof(ReportDto).IsAssignableFrom(type)
+        //        || typeof(IEnumerable<ReportDto>).IsAssignableFrom(type);
 
         public override async Task WriteResponseBodyAsync(
             OutputFormatterWriteContext context, Encoding selectedEncoding)
