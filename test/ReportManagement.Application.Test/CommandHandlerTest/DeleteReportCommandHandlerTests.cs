@@ -2,16 +2,13 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using ReportManagement.Application.AutoMapper;
-using ReportManagement.Application.CommandHandler;
-using ReportManagement.Application.Common;
+using ReportManagement.Application.CommandHandler.V1;
+using ReportManagement.Application.Common.V1;
 using ReportManagement.Application.Events;
 using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

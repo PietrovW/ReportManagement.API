@@ -1,4 +1,4 @@
-﻿namespace ReportManagement.API.Request
+﻿namespace ReportManagement.Application.Request.V1
 {
     public class CreateReportRequest
     {

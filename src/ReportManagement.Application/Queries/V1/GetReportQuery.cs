@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using ReportManagement.Application.Dtos;
+using ReportManagement.Application.Dtos.V1;
 
-namespace ReportManagement.Application.Queries
+namespace ReportManagement.Application.Queries.V1
 {
     public class GetReportQuery: IRequest<ReportDto>
     {

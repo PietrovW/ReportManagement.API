@@ -1,4 +1,4 @@
-﻿namespace ReportManagement.Application.Dtos
+﻿namespace ReportManagement.Application.Dtos.V1
 {
     public class ReportDto
     {

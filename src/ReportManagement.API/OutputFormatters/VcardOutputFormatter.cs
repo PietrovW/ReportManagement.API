@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using ReportManagement.Application.Dtos;
+using ReportManagement.Application.Dtos.V1;
 
 namespace ReportManagement.API.OutputFormatters
 {
@@ -9,7 +10,7 @@ namespace ReportManagement.API.OutputFormatters
     {
         public VcardOutputFormatter()
         {
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/vcard"));
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/plain"));
 
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);

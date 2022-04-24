@@ -1,4 +1,4 @@
-﻿namespace ReportManagement.API.Models
+﻿namespace ReportManagement.API.Models.V1
 {
     public record Report
     {

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using ReportManagement.Application.Dtos;
-using ReportManagement.Application.Queries;
+using ReportManagement.Application.Dtos.V1;
+using ReportManagement.Application.Queries.V1;
 using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 
-namespace ReportManagement.Application.QuerieHandler
+namespace ReportManagement.Application.QuerieHandler.V1
 {
     public class GetReportQueryHandler : IRequestHandler<GetReportQuery, ReportDto>
     {

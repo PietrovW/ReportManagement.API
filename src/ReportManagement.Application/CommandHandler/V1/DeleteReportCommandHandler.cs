@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using MediatR;
-using ReportManagement.Application.Common;
+﻿using MediatR;
+using ReportManagement.Application.Common.V1;
 using ReportManagement.Application.Events;
 using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 
-namespace ReportManagement.Application.CommandHandler
+namespace ReportManagement.Application.CommandHandler.V1
 {
-    public class DeleteReportCommandHandler : IRequestHandler<DeleteReportCommand>
+    public sealed class DeleteReportCommandHandler : IRequestHandler<DeleteReportCommand>
     {
         private readonly IWriteReportRepository _reportRepository;
         private readonly IReadReportRepository _readReportRepository;

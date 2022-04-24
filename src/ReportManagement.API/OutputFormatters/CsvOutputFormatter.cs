@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
-using ReportManagement.Application.Dtos;
+using ReportManagement.Application.Dtos.V1;
 using System.Text;
 
 namespace ReportManagement.API.OutputFormatters
@@ -11,9 +11,6 @@ namespace ReportManagement.API.OutputFormatters
         {
             SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv"));
             SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/csv"));
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv; charset=utf-8"));
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv; charset=utf-8; v=1.0"));
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv; charset=utf-8; v=2.0"));
 
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);

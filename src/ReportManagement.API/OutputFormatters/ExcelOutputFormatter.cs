@@ -3,6 +3,8 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
+using ReportManagement.Application.Dtos;
+using ReportManagement.Application.Dtos.V1;
 using System.Reflection;
 
 namespace ReportManagement.API.OutputFormatters
@@ -16,7 +18,7 @@ namespace ReportManagement.API.OutputFormatters
 
         public bool CanWriteType(OutputFormatterCanWriteContext context)
         {
-            return typeof(IEnumerable<object>).IsAssignableFrom(context.ObjectType);
+            return typeof(IEnumerable<ReportDto>).IsAssignableFrom(context.ObjectType);
         }
 
 
@@ -27,7 +29,7 @@ namespace ReportManagement.API.OutputFormatters
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var excelStream = CreateExcelFile(context.Object as IEnumerable<object>);
+            var excelStream = CreateExcelFile(context.Object as IEnumerable<ReportDto>);
 
             var response = context.HttpContext.Response;
 
@@ -42,7 +44,7 @@ namespace ReportManagement.API.OutputFormatters
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var fileName = (context.Object as IEnumerable<object>).GetType().GetGenericArguments()[0].Name;
+            var fileName = (context.Object as IEnumerable<ReportDto>).GetType().GetGenericArguments()[0].Name;
 
             context.HttpContext.Response.Headers["Content-Disposition"] =
                 new ContentDispositionHeaderValue("attachment")
@@ -52,7 +54,7 @@ namespace ReportManagement.API.OutputFormatters
             context.HttpContext.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         }
 
-        private MemoryStream CreateExcelFile(IEnumerable<object> data)
+        private MemoryStream CreateExcelFile(IEnumerable<ReportDto> data)
         {
             var ms = new MemoryStream();
 

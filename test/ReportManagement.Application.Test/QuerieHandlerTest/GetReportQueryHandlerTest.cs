@@ -2,14 +2,14 @@
 using Moq;
 using NUnit.Framework;
 using ReportManagement.Application.AutoMapper;
-using ReportManagement.Application.Dtos;
-using ReportManagement.Application.QuerieHandler;
-using ReportManagement.Application.Queries;
 using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using ReportManagement.Application.Queries.V1;
+using ReportManagement.Application.QuerieHandler.V1;
+using ReportManagement.Application.Dtos.V1;
 
 namespace ReportManagement.Application.Test.QuerieHandlerTest
 {

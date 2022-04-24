@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
-using ReportManagement.Application.Common;
+using ReportManagement.Application.Common.V1;
 using ReportManagement.Application.Events;
+using ReportManagement.Application.Request.V1;
 using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 
-namespace ReportManagement.Application.CommandHandler
+namespace ReportManagement.Application.CommandHandler.V1
 {
-    public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Guid>
+    public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, CreateReportRequest>
     {
         private readonly IMapper _mapper;
         private readonly IWriteReportRepository _reportRepository;
@@ -18,13 +19,13 @@ namespace ReportManagement.Application.CommandHandler
             _reportRepository = reportRepository;
             _mediator = mediator;
         }
-        public Task<Guid> Handle(CreateReportCommand request, CancellationToken cancellationToken)
+        public async Task<CreateReportRequest> Handle(CreateReportCommand request, CancellationToken cancellationToken)
         {
             ReportModel reportModel = _mapper.Map<ReportModel>(request);
             Guid id= _reportRepository.Insert(reportModel);
-            _mediator.Publish(new CreateReportEvents() { Id = id, Name = request.Name , Description= typeof(CreateReportCommand).Name });
+           await _mediator.Publish(new CreateReportEvents() { Id = id, Name = request.Name , Description= typeof(CreateReportCommand).Name });
             
-            return Task.FromResult(id);
+            return new CreateReportRequest() { Name = request.Name };
         }
     }
 }

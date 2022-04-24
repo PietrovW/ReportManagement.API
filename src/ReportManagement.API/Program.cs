@@ -5,20 +5,23 @@ using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using ReportManagement.API.Controllers.V1;
 using ReportManagement.API.Extensions;
 using ReportManagement.API.OperationFilters;
 using ReportManagement.API.OutputFormatters;
-using ReportManagement.API.Request;
-using ReportManagement.Application.CommandValidator;
-using ReportManagement.Application.Common;
-using ReportManagement.Application.Queries;
+using ReportManagement.Application.CommandValidator.V1;
+using ReportManagement.Application.Common.V1;
+using ReportManagement.Application.Request.V1;
 using ReportManagement.Data.Configurations;
 using ReportManagement.Domain.Repositorys;
 using ReportManagement.Infrastructure.Data;
 using ReportManagement.Infrastructure.Data.Settings;
 using ReportManagement.Infrastructure.Repositorys;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,19 +36,49 @@ builder.Services.AddTransient<IReadReportRepository, ReadReportRepository>();
 builder.Services.AddTransient<IWriteReportRepository, WriteReportRepository>();
 builder.Services.AddMediatR(assemblie);
 builder.Services.AddAutoMapper(assemblie);
+
 builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
     options.ReturnHttpNotAcceptable = true;
-    options.Filters.Add<FormatFilter>();
+    //options.Filters.Add<FormatFilter>();
     options.OutputFormatters.Add(new VcardOutputFormatter());
     options.OutputFormatters.Add(new ExcelOutputFormatter());
     options.OutputFormatters.Add(new CsvOutputFormatter());
+    options.FormatterMappings.SetMediaTypeMappingForFormat(
+                                  "csv", "application/csv");
+    options.FormatterMappings.SetMediaTypeMappingForFormat(
+                                "csv", "text/csv");
 }).AddXmlSerializerFormatters()
-.AddXmlDataContractSerializerFormatters()
 .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+    //.AddMvcOptions(options =>
+    //{
+    //    //options.InputFormatters.Add(new PlainTextInputFormatter());
+    //    options.OutputFormatters.Add(new CsvOutputFormatter());
+    //    options.FormatterMappings.SetMediaTypeMappingForFormat("csv", MediaTypeHeaderValue.Parse("text/csv"));
+    //    options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+    //    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+    //});
+
+builder.Services.AddApiVersioning(config =>
+{
+    config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    config.AssumeDefaultVersionWhenUnspecified = true;
+    config.ReportApiVersions = true;
+
+    config.ApiVersionReader = ApiVersionReader.Combine(
+         new QueryStringApiVersionReader("api-version"),
+         new HeaderApiVersionReader("X-Version"),
+         new MediaTypeApiVersionReader("ver"));
+});
+
+builder.Services.AddVersionedApiExplorer(setup =>
+{
+    setup.GroupNameFormat = "'v'VVV";
+    setup.SubstituteApiVersionInUrl = true;
 });
 
 builder.Services.AddFluentValidation(fv =>
@@ -57,15 +90,19 @@ builder.Services.Configure<MongoOptions>(
     builder.Configuration.GetSection(MongoOptions.Position));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+//
+
 builder.Services.AddFluentValidationRulesToSwagger();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-    c.OperationFilter<AddCommonParameOperationFilter>();
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-    c.EnableAnnotations();
+    options.OperationFilter<AddCommonParameOperationFilter>();
+    options.OperationFilter<SwaggerDefaultValues>();
+   // options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1", Description = "Test Description" });
+   // options.SwaggerDoc("v2", new OpenApiInfo { Title = "My API - V2", Version = "v2", Description = "Test Description v2" });
+    options.EnableAnnotations();
 });
 
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Filename=ReportDatabase.db", options =>
  {
      options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
@@ -85,44 +122,37 @@ app.UseReDoc(c =>
 {
     c.DocumentTitle = "REDOC API Documentation";
     c.SpecUrl = "/swagger/v1/swagger.json";
-    c.DocumentTitle = "My API Docs";
-    c.EnableUntrustedSpec();
-    c.ScrollYOffset(10);
-    c.HideHostname();
-    c.HideDownloadButton();
-    c.ExpandResponses("200,201");
-    c.RequiredPropsFirst();
-    c.NoAutoAuth();
-    c.PathInMiddlePanel();
-    c.HideLoading();
-    c.NativeScrollbars();
-    c.DisableSearch();
-    c.OnlyRequiredInSamples();
-    c.SortPropsAlphabetically();
 });
-app.MapGet("api/reports/{id:Guid}.{format?}", async (IMediator mediator, Guid id) =>
-{
-    return await mediator.Send(new GetReportQuery() { Id = id });
-});//.Produces(StatusCodes.Status200OK, "application/json", "text/vcard", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//app.MapGet("api/reports/{id}", async (IMediator mediator,Guid id) =>
+//{
+//    return await mediator.Send(new GetReportQuery() { Id = id });
+//});//.Accepts<ReportDto>("text/xml").Accepts<ReportDto>("text/vcard").Accepts<ReportDto>("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//.Produces<ReportDto>(StatusCodes.Status200OK, "text/xml")
+// .Produces(StatusCodes.Status404NotFound);//.Produces(StatusCodes.Status200OK, "application/json", "text/vcard", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-app.MapPost("api/reports", async (IValidator<CreateReportRequest> validator, IMediator mediator, LinkGenerator links, [FromBody] CreateReportRequest request) =>
-{
-    ValidationResult validationResult = validator.Validate(request);
+//app.MapPost("api/reports", async (IValidator<CreateReportRequest> validator, IMediator mediator, LinkGenerator links, [FromBody] CreateReportRequest request) =>
+//{
+//    ValidationResult validationResult = validator.Validate(request);
 
-    if (!validationResult.IsValid)
-    {
-        return Results.BadRequest(validationResult);
-    }
+//    if (!validationResult.IsValid)
+//    {
+//        return Results.BadRequest(validationResult);
+//    }
 
-    var command = new CreateReportCommand() { Name = request.Name };
-    var result = await mediator.Send(command);
-    return Results.Created($"/reports/{result}", command);
-});
-app.MapDelete("api/reports", async (IMediator mediator, Guid id) =>
+//    var command = new CreateReportCommand() { Name = request.Name };
+//    var result = await mediator.Send(command);
+//    return Results.Created($"/reports/{result}", command);
+//});
+//app.MapDelete("api/reports", async (IMediator mediator, Guid id) =>
+//{
+//    var command = new DeleteReportCommand() { Id = id };
+//    var result = await mediator.Send(command);
+//    return Results.Created($"/reports/{result}", command);
+//});
+app.UseRouting();
+app.UseEndpoints(endpoints =>
 {
-    var command = new DeleteReportCommand() { Id = id };
-    var result = await mediator.Send(command);
-    return Results.Created($"/reports/{result}", command);
+    endpoints.MapControllers();
 });
 app.MigrateDatabase();
 app.Run();

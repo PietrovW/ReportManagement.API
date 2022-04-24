@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ReportManagement.API.Request;
+using ReportManagement.Application.Request.V1;
 
 namespace ReportManagement.API.Validators
 {

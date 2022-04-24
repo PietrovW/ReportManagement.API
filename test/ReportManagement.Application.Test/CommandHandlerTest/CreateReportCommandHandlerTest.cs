@@ -3,8 +3,9 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using ReportManagement.Application.AutoMapper;
-using ReportManagement.Application.CommandHandler;
-using ReportManagement.Application.Common;
+using ReportManagement.Application.CommandHandler.V1;
+using ReportManagement.Application.Common.V1;
+using ReportManagement.Application.Request.V1;
 using ReportManagement.Domain.Models;
 using ReportManagement.Domain.Repositorys;
 using System;
@@ -31,7 +32,7 @@ namespace ReportManagement.Application.Test.CommandHandlerTest
             var handler = new CreateReportCommandHandler(mapper, reportRepositoryMoq.Object, mediatorMoq.Object);
 
             //Act
-            Guid id = await handler.Handle(command, new System.Threading.CancellationToken());
+            CreateReportRequest reportRequest = await handler.Handle(command, new System.Threading.CancellationToken());
 
             //Asert
             reportRepositoryMoq.Verify(x => x.Insert(It.IsAny<ReportModel>()));
