@@ -3,7 +3,6 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
-using ReportManagement.Application.Dtos;
 using ReportManagement.Application.Dtos.V1;
 using System.Reflection;
 
@@ -44,7 +43,7 @@ namespace ReportManagement.API.OutputFormatters
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var fileName = (context.Object as IEnumerable<ReportDto>).GetType().GetGenericArguments()[0].Name;
+            var fileName = "test";// (context.Object as IEnumerable<ReportDto>).GetType().GetGenericArguments()[0].Name;
 
             context.HttpContext.Response.Headers["Content-Disposition"] =
                 new ContentDispositionHeaderValue("attachment")
@@ -76,31 +75,31 @@ namespace ReportManagement.API.OutputFormatters
                 var workingSheet = ((WorksheetPart)wbPart.GetPartById(sheet.Id)).Worksheet;
 
                 //get model properties
-                var props = new List<PropertyInfo>(data.First().GetType().GetProperties());
+                ////var props = new List<PropertyInfo>(data.First().GetType().GetProperties());
 
-                //header
-                var headerRow = new Row();
-                foreach (var prop in props)
-                {
-                    headerRow.AppendChild(
-                        GetCell(prop.Name)
-                    );
-                }
-                sheetData.AppendChild(headerRow);
+                //////header
+                ////var headerRow = new Row();
+                ////foreach (var prop in props)
+                ////{
+                ////    headerRow.AppendChild(
+                ////        GetCell(prop.Name)
+                ////    );
+                ////}
+                ////sheetData.AppendChild(headerRow);
 
                 //body
-                foreach (var record in data)
-                {
-                    var row = new Row();
-                    foreach (var prop in props)
-                    {
-                        var propValue = prop.GetValue(record, null).ToString();
-                        row.AppendChild(
-                            GetCell(propValue)
-                        );
-                    }
-                    sheetData.AppendChild(row);
-                }
+                //foreach (var record in data)
+                //{
+                //    var row = new Row();
+                //    foreach (var prop in props)
+                //    {
+                //        var propValue = prop.GetValue(record, null).ToString();
+                //        row.AppendChild(
+                //            GetCell(propValue)
+                //        );
+                //    }
+                //    sheetData.AppendChild(row);
+                //}
                 wbPart.Workbook.Sheets.AppendChild(sheet);
                 wbPart.Workbook.Save();
             }

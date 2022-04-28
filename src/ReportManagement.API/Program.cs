@@ -39,21 +39,18 @@ builder.Services.AddAutoMapper(assemblie);
 
 builder.Services.AddControllers(options =>
 {
-    options.RespectBrowserAcceptHeader = true; // false by default
+    options.RespectBrowserAcceptHeader = true;
     options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-
-    // register the VcardOutputFormatter
-    options.OutputFormatters.Add(new VcardOutputFormatter());
-    ////options.RespectBrowserAcceptHeader = true;
-    //options.ReturnHttpNotAcceptable = true;
-    ////options.Filters.Add<FormatFilter>();
-    //options.OutputFormatters.Add(new VcardOutputFormatter());
-    //options.OutputFormatters.Add(new ExcelOutputFormatter());
-    //options.OutputFormatters.Add(new CsvOutputFormatter());
-    //options.FormatterMappings.SetMediaTypeMappingForFormat(
-    //                              "csv", "application/csv");
-    //options.FormatterMappings.SetMediaTypeMappingForFormat(
-    //                            "csv", "text/csv");
+    options.OutputFormatters.Add(new CsvOutputFormatter());
+    options.OutputFormatters.Add(new ExcelOutputFormatter());
+    options.FormatterMappings.SetMediaTypeMappingForFormat(
+                                  "csv", "application/csv");
+    options.FormatterMappings.SetMediaTypeMappingForFormat(
+                                "csv", "text/csv");
+    options.FormatterMappings.SetMediaTypeMappingForFormat(
+                                  "csv", "application/csv");
+    options.FormatterMappings.SetMediaTypeMappingForFormat(
+                                "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 }).AddXmlSerializerFormatters()
 .AddJsonOptions(options =>
 {
