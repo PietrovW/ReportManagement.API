@@ -41,7 +41,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReportManagement.Infrastructure\ReportManagement.Infrastructure.csproj" />
+
+	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+		  <_Parameter1>$(AssemblyName).Test.Acceptance</_Parameter1>
+	  </AssemblyAttribute>
+	  <ProjectReference Include="..\ReportManagement.Infrastructure\ReportManagement.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
