@@ -1,13 +1,18 @@
 version: '3.4'
 
 services:
-  reportmanagement.api:
+  jaeger:
+    ports:
+      - 6831:6831
+      - 16686:16686
+      - 4317:4317
+ 
+  reportmanagement:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
       - 80:80
       - 443:443
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - jaeger

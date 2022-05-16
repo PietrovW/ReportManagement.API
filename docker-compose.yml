@@ -1,7 +1,10 @@
 version: '3.4'
 
 services:
-  reportmanagement.api:
+  jaeger:
+    image: jaegertracing/all-in-one
+    
+  reportmanagement:
     image: ${DOCKER_REGISTRY-}reportmanagementapi
     build:
       context: .
@@ -9,3 +12,7 @@ services:
     environment:
       Mongo__ConnectionString: "mongodb://root:rootpassword@localhost:27017"
       Mongo__DatabaseName: "testdb"
+    
+
+
+  

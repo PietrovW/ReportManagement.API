@@ -1,15 +1,10 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using FluentValidation.Results;
 using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
-using ReportManagement.API.Controllers.V1;
 using ReportManagement.API.Extensions;
 using ReportManagement.API.OperationFilters;
 using ReportManagement.API.OutputFormatters;
@@ -21,7 +16,8 @@ using ReportManagement.Domain.Repositorys;
 using ReportManagement.Infrastructure.Data;
 using ReportManagement.Infrastructure.Data.Settings;
 using ReportManagement.Infrastructure.Repositorys;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Resources;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,15 +52,7 @@ builder.Services.AddControllers(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
-    //.AddMvcOptions(options =>
-    //{
-    //    //options.InputFormatters.Add(new PlainTextInputFormatter());
-    //    options.OutputFormatters.Add(new CsvOutputFormatter());
-    //    options.FormatterMappings.SetMediaTypeMappingForFormat("csv", MediaTypeHeaderValue.Parse("text/csv"));
-    //    options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-    //    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
-    //});
-
+    
 builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
@@ -110,6 +98,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite
      options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
  }));
 builder.Services.AddScoped<IApplicationMongoDbContext, ApplicationMongoDbContext>();
+builder.Services.AddOpenTelemetryTracing(b => {
+    b.SetResourceBuilder(
+        ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
+     //.AddAspNetCoreInstrumentation()
+     .AddOtlpExporter(opts => { opts.Endpoint = new Uri("http://localhost:4317"); });
+});
 var app = builder.Build();
 app.UseHttpsRedirection();
 
